@@ -37,12 +37,12 @@ class OverviewViewModel : ViewModel() {
     val response: LiveData<String>
         get() = _response
 
-    // The internal MutableLiveData that stores  the single MarsProperty object
-    private val _property = MutableLiveData<MarsProperty>()
+    // The internal MutableLiveData that stores the list of MarsProperties
+    private val _properties = MutableLiveData<List<MarsProperty>>()
 
-    // The external immutable LiveData for a single MarsProperty object
-    val property: LiveData<MarsProperty>
-        get() = _property
+    // The external immutable LiveData for the list of MarsProperties
+    val properties: LiveData<List<MarsProperty>>
+        get() = _properties
 
     /**
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
@@ -58,13 +58,9 @@ class OverviewViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val listResult = MarsApi.retrofitService.getProperties()
+                _properties.value = MarsApi.retrofitService.getProperties()
                 _response.value =
-                    "Success: ${listResult.size} Mars properties retrieved"
-                if (listResult.size > 0) {
-                    _property.value = listResult[0]
-                }
-
+                    "Success:  Mars properties retrieved"
             } catch (e: Exception) {
                 _response.value = "Failure: ${e.message}"
             }
