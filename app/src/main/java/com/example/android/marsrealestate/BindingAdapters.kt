@@ -64,6 +64,7 @@ fun bindStatus(statusImageView: ImageView,
         MarsApiStatus.DONE -> {
             statusImageView.visibility = View.GONE
         }
+        else -> {}
     }
 }
 
